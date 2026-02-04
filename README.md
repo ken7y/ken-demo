@@ -43,7 +43,7 @@ Full walkthrough of the diagrams and data flow: [docs/ARCHITECTURE.md](docs/ARCH
 **Prerequisites:** Node.js 18+, pnpm, [ngrok](https://ngrok.com/), a Recall.ai API key.
 
 ```bash
-git clone <repo-url>
+git clone https://github.com/ken7y/ken-demo
 cd recall-interview
 pnpm install
 
