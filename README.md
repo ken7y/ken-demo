@@ -65,7 +65,9 @@ Edit `backend/.env` with your values:
 1. Start ngrok: `ngrok http 3001`
 2. Go to [Recall Dashboard → Webhooks](https://us-west-2.recall.ai/dashboard/webhooks) (adjust URL for your region)
 3. Click **Add Endpoint** and enter: `https://<your-ngrok-domain>/api/webhook`
-4. Subscribe to events: `transcript.data`, `participant_events.*`, `recording.done`
+4. Subscribe to events: `recording.done`
+
+> **Note:** `transcript.data` and `participant_events.*` are delivered via the per-bot `realtime_endpoints` configured in the bot creation payload — they do not need to be (and cannot be) subscribed on the dashboard endpoint. `recording.done` is the only lifecycle event the backend actually acts on: it extracts the `recordingId` so the post-interview transcript fetch works.
 
 Then start everything:
 
