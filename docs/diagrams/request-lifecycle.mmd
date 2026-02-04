@@ -1,0 +1,56 @@
+sequenceDiagram
+    autonumber
+    participant U as Frontend
+    participant B as Backend
+    participant R as Recall.ai API
+    participant M as Meeting
+
+    rect rgb(225, 245, 254)
+        Note over U,M: Starting a capture
+        U->>B: POST /api/bot — meeting URL
+        B->>R: POST /bot — meeting URL + webhook config
+        R-->>B: Bot ID
+        B-->>U: Bot ID
+    end
+
+    rect rgb(243, 229, 245)
+        Note over U,M: Bot joins the meeting
+        R->>M: Bot joins
+        U->>B: GET /api/bot/:id — polling every 2s
+        B->>R: GET /bot/:id
+        R-->>B: status: joining_call
+        B-->>U: status: joining_call
+    end
+
+    rect rgb(232, 245, 233)
+        Note over U,M: Live transcription
+        U->>B: GET /api/events — open SSE connection
+        M-->>R: Audio stream
+        R->>B: POST /webhook — transcript.data chunk
+        B->>U: SSE: transcript event
+        R->>B: POST /webhook — participant event
+        B->>U: SSE: participant event
+    end
+
+    rect rgb(255, 243, 224)
+        Note over U,M: Meeting ends
+        M-->>R: Meeting ended
+        R->>B: POST /webhook — recording.done + recording ID
+        B->>B: Store bot ID → recording ID
+        U->>B: GET /api/bot/:id — poll detects done
+        B-->>U: status: done
+        U->>U: Navigate to post-interview
+    end
+
+    rect rgb(232, 234, 246)
+        Note over U,M: Fetching the full transcript
+        U->>B: POST /api/bot/:id/transcript — trigger async job
+        B->>R: POST /recording/:id/create_transcript
+        R-->>B: Transcript ID
+        U->>B: GET /api/bot/:id/transcript — polling
+        B->>R: GET /recording/:id
+        R-->>B: Transcript URL + video URL
+        B->>R: GET transcript URL
+        R-->>B: Full transcript data
+        B-->>U: Transcript + video URL
+    end
