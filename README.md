@@ -65,7 +65,7 @@ Edit `backend/.env` with your values:
 1. Start ngrok: `ngrok http 3001`
 2. Go to [Recall Dashboard → Webhooks](https://us-west-2.recall.ai/dashboard/webhooks) (adjust URL for your region)
 3. Click **Add Endpoint** and enter: `https://<your-ngrok-domain>/api/webhook`
-4. Subscribe to events: `bot.status_change`, `transcript.data`, `recording.done`
+4. Subscribe to events: `transcript.data`, `participant_events.*`, `recording.done`
 
 Then start everything:
 
